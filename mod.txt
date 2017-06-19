@@ -1,0 +1,35 @@
+{
+    "name": "PDUI",
+    "description": "A framework allowing for UI elements to be written in JSON and loaded at runtime",
+    "author": "Nick",
+    "version": "0.1-1",
+    "persist_scripts": [
+        {
+            "global": "PDUtils",
+            "script_path": "lua/utils.lua"
+        },
+        {
+            "global": "PDUI_Bindings",
+            "script_path": "lua/pdui_bindings.lua"
+        },
+        {
+            "global": "PDUI_Animations",
+            "script_path": "lua/pdui_animations.lua"
+        },
+        {
+            "global": "PDUI",
+            "script_path": "lua/pdui.lua"
+        }
+    ],
+    "keybinds": [
+        {
+        	"keybind_id": "PDUI_Example",
+        	"name": "PDUI example",
+        	"description": "An example",
+        	"script_path": "example/example.lua",
+        	"run_in_menu": false,
+        	"run_in_game": true,
+        	"localized": false
+        }
+    ]
+}

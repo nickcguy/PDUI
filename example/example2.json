@@ -1,0 +1,51 @@
+{
+	"meta": {
+		"fonts": {
+			"eroded": "fonts/font_eroded",
+			"medium": "fonts/font_medium_mf",
+			"large": "fonts/font_large_mf"
+		},
+		"colours": {
+			"red":   [255, 0,   0],
+			"green": [0,   255, 0],
+			"blue":  [0,   0,   255],
+			"white": [255, 255, 255]
+		}
+	},
+	"structure": [
+		{
+			"type": "panel",
+			"name": "test21",
+			"layer": 1,
+			"bounds": [100, 800, 100, 100],
+			"children": [
+				{
+					"type": "label",
+					"text": "Testing PDUI on the left",
+					"font": "medium",
+					"size": 16,
+					"layer": 111,
+					"colour": "green",
+					"bounds": [120, 820, 100, 100]
+				}
+			]
+		},
+		{
+			"type": "panel",
+			"name": "test22",
+			"layer": 2,
+			"bounds": [450, 800, 100, 100],
+			"children": [
+				{
+					"type": "label",
+					"text": "Testing PDUI on the right",
+					"font": "medium",
+					"layer": 211,
+					"size": 16,
+					"colour": "green",
+					"bounds": [470, 820, 100, 100]
+				}
+			]
+		}
+	]
+}

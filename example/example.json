@@ -1,0 +1,91 @@
+{
+	"meta": {
+		"fonts": {
+			"eroded": "fonts/font_eroded",
+			"medium": "fonts/font_medium_mf",
+			"large": "fonts/font_large_mf"
+		},
+		"colours": {
+			"red":   [255, 0,   0],
+			"green": [0,   255, 0],
+			"blue":  [0,   0,   255],
+			"white": [255, 255, 255],
+			"silver": [192, 192, 192]
+		},
+		"variables": {
+			"textBounceBounds": [150, 10, 150, 24],
+			"textBounceAnimationSet": [
+				{
+					"type": "marquee-bounce",
+					"speed": 90,
+					"left": 100,
+					"right": 450
+				}
+			]
+		}
+	},
+	"structure": [
+		{
+			"type": "panel",
+			"name": "test11",
+			"bounds": [100, 100, 350, 100],
+			"children": [
+				{
+					"type": "bitmap",
+					"bounds": "textBounceBounds",
+					"texture": "guis/textures/pd2/skilltree/selectionframe",
+					"wrap": "wrap",
+					"colour": "silver",
+					"alpha": 70,
+					"animation": "textBounceAnimationSet"
+				},
+				{
+					"type": "rect",
+					"bounds": "textBounceBounds",
+					"colour": "red",
+					"alpha": 10,
+					"animation": "textBounceAnimationSet"
+				},
+				{
+					"type": "label",
+					"text": {
+						"type": "binding",
+						"target": "Overlord:IsPollingEnabledStr()",
+						"interval": 0.2,
+						"prefix": "Overlord polling: "
+					},
+					"font": "medium",
+					"size": 16,
+					"colour": "green",
+					"alpha": 100,
+					"bounds": "textBounceBounds",
+					"animation": "textBounceAnimationSet"
+				},
+				{
+					"type": "label",
+					"text": {
+						"type": "binding",
+						"target": "managers.network.account:username()",
+						"interval": 5,
+						"default": "Name",
+						"prefix": "Username: "
+					},
+					"font": "medium",
+					"size": 16,
+					"colour": "blue",
+					"alpha": 70,
+					"bounds": [10, 30]
+				},
+				{
+					"type": "bitmap",
+					"texture": "guis/textures/pd2/skilltree/selectionframe",
+					"wrap": "wrap",
+					"colour": "silver",
+					"alpha": 70,
+					"blend": "add",
+					"bounds": [0, 0, "100%", "100%"]
+				}
+			]
+		}
+	]
+}
