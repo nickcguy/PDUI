@@ -51,9 +51,6 @@ function PDUtils:EndsWith(String,End)
 end
 
 function PDUtils:TransformBounds(bounds, parent)
-    log("ToString: "..tostring(bounds));
-    log("json: "..tostring(json.encode(bounds)));
-
     bounds = bounds or {0, 0, 0, 0};
     bounds[1] = parent[1] + bounds[1];
     bounds[2] = parent[2] + bounds[2];
@@ -131,4 +128,27 @@ function PDUtils:SafeGet(path, fallback, origin)
     else
         return from
     end
+end
+
+function PDUtils:FindKey(table, v)
+    for i,value in pairs(table) do
+        if value == v then
+            return i;
+        end
+    end
+    return nil;
+end
+
+function PDUtils:RemoveValue(t, value)
+    local i = self:FindKey(t, value);
+    if i ~= nil then
+        table.remove(t, i);
+    end
+end
+
+function PDUtils:T(cond, ifTrue, ifFalse)
+    if cond then
+        return ifTrue;
+    end
+    return ifFalse;
 end

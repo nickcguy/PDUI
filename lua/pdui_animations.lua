@@ -13,39 +13,16 @@ PDUI_Animations.runningAnimations = PDUI_Animations.runningAnimations or {};
 
 function PDUI_Animations:Init()
     log("Animations initialized");
-    self:AddAnimationType("marquee", function(element, args, dt)
-        args.x = element:x()
-        args.t = 0
-        local speed = args['speed'] or 90
-        args.t = args.t + dt
-        args.x = args.x - speed * dt
-        element:set_x(args.x)
-        if 0 > element:right() then
-            element:set_x(element:parent():w())
-            args.x = element:x()
-        end
+    self:AddAnimationType("marquee", function(node, args, dt)
+
     end)
 
-    self:AddAnimationType("marquee-bounce", function(element, args, dt)
-        args.x = element:x()
-        args.t = 0
-        args.speed = args.speed or 90
+    self:AddAnimationType("marquee-bounce", function(node, args, dt)
 
-        if args.x < args.left and args.speed > 0 then
-            args.speed = -args.speed;
-        end
+    end)
 
-        if element:right() > args.right and args.speed < 0 then
-            args.speed = -args.speed;
-        end
+    self:AddAnimationType("colour", function(node, args, dt)
 
-        args.t = args.t + dt
-        args.x = args.x - args.speed * dt
-        element:set_x(args.x)
-        if 0 > element:right() then
-            element:set_x(element:parent():w())
-            args.x = element:x()
-        end
     end)
 
 end
@@ -57,7 +34,7 @@ end
 function PDUI_Animations:Update(t, dt)
     for scope,v in pairs(self.runningAnimations) do
         for _,anim in pairs(v) do
-            anim.Update(anim.target, anim.args, dt);
+--            anim.Update(anim.target, anim.args, dt);
         end
     end
 end
@@ -68,7 +45,7 @@ function PDUI_Animations:AddAnimationType(type, func)
     log(json.encode(self.animations))
 end
 
-function PDUI_Animations:FindAndStartAnimations(scope, element, data)
+function PDUI_Animations:FindAndStartAnimations(scope, node, data)
     local animParent = data['animation'];
     if animParent then
         for _,anim in pairs(animParent) do
@@ -76,7 +53,7 @@ function PDUI_Animations:FindAndStartAnimations(scope, element, data)
             local animFunc = self.animations[tostring(type)];
             if animFunc then
                 local animData = {
-                    target = element,
+                    target = node,
                     args = anim,
                     Update = animFunc;
                 };

@@ -12,12 +12,12 @@ PDUI_Bindings.bindings = {};
 PDUI_Bindings.handlers = {};
 
 function PDUI_Bindings:Init()
-    self:RegisterBindingHandler("label", "text", function(element, value, default, binding)
+    self:RegisterBindingHandler("label", "text", function(node, value, default, binding)
 
         local prefix = binding['prefix'] or "";
         local suffix = binding['suffix'] or "";
 
-        element:set_text(tostring(prefix)..tostring(value)..tostring(suffix));
+        node:GetWidget():set_text(tostring(prefix)..tostring(value)..tostring(suffix));
     end)
 
 end

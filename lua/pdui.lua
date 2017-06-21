@@ -1,11 +1,11 @@
 if not PDUtils then return end;
-if not PDUI_Animations then return end;
 if not PDUI_Bindings then return end;
+
 
 PDUI = PDUI or class();
 
 PDUI.workspace = nil;
-PDUI.modpath = nil;
+PDUI.modpath = "mods/PDUI/";
 PDUI.typeBuilders = {};
 PDUI.containerTypes = {};
 PDUI.fonts = {};
@@ -15,6 +15,13 @@ PDUI.variables = {};
 -- [id] = {id, path, data, elements}
 PDUI.loaded = {};
 PDUI.named = {};
+
+--dofile(PDUI.modpath..'lua/dom/pdui_dom_require.lua')
+
+dofile(PDUI.modpath..'lua/dom/pdui_node.lua')
+dofile(PDUI.modpath..'lua/dom/pdui_dom.lua')
+dofile(PDUI.modpath..'lua/pdui_builder.lua')
+
 
 function PDUI:Ready()
     return self.workspace ~= nil;
@@ -74,92 +81,34 @@ function PDUI:GetColour(colour)
 end
 
 function PDUI:RegisterDefaultBuilders()
-    self:RegisterTypeBuilder("panel", function(ws, parent, data, depth, parentBounds)
-        local b = PDUtils:TransformBounds(data['bounds'], parentBounds);
-        return ws:panel({
-            name = data['name'],
-            layer = depth,
-            x = b[1],
-            y = b[2],
-            w = b[3],
-            h = b[4]
-        }), b;
+    self:RegisterTypeBuilder("panel", function(ws, dom, parentNode, data, depth, parentBounds)
+        return PDUI_Builder:Panel(ws, dom, parentNode, data, depth, parentBounds);
     end, true);
-
-    self:RegisterTypeBuilder("rect", function(ws, parent, data, depth, parentBounds)
-        local b = PDUtils:TransformBounds(data['bounds'], parentBounds);
-        local alpha = data['alpha'] or 100;
-        return parent:rect({
-            color = PDUI:GetColour(data['colour']),
-            alpha = alpha / 100,
-            layer = depth,
-            x = b[1],
-            y = b[2],
-            w = b[3],
-            h = b[4]
-        }), b;
+    self:RegisterTypeBuilder("rect", function(ws, dom, parentNode, data, depth, parentBounds)
+        return PDUI_Builder:Rect(ws, dom, parentNode, data, depth, parentBounds);
     end, false);
-
-    self:RegisterTypeBuilder("label", function(ws, parent, data, depth, parentBounds)
-        local b = PDUtils:TransformBounds(data['bounds'], parentBounds);
-        local font = self:GetFont(data['font']);
-        local size = data['size'] or 12;
-        local alpha = data['alpha'] or 100;
-        local align = data['halign'] or nil;
-        local vert = data['valign'] or nil;
-
-        local colour = PDUI:GetColour(data['colour']):with_alpha(alpha / 100);
-        return parent:text{
-            text = data['text'],
-            font = font,
-            font_size = size,
-            color = colour,
-            layer = depth,
-            align = align,
-            vertical = vert,
-            x = b[1],
-            y = b[2],
-            w = b[3] or nil,
-            h = b[4] or nil
-        }, b;
+    self:RegisterTypeBuilder("label", function(ws, dom, parentNode, data, depth, parentBounds)
+        return PDUI_Builder:Label(ws, dom, parentNode, data, depth, parentBounds);
     end, false);
-
-    self:RegisterTypeBuilder("bitmap", function(ws, parent, data, depth, parentBounds)
-        local b = PDUtils:TransformBounds(data['bounds'], parentBounds);
-        local alpha = data['alpha'] or 100;
-        local colour = PDUI:GetColour(data['colour']);
-        local texture_rect = data['region'] or nil;
-        return parent:bitmap{
-            texture = data['texture'],
-            render_template = data['template'] or nil,
-            blend_mode = data['blend'] or nil,
-            wrap_mode = data['wrap'] or nil,
-            color = colour,
-            layer = depth,
-            alpha = alpha / 100,
-            texture_rect = texture_rect,
-            x = b[1],
-            y = b[2],
-            w = b[3],
-            h = b[4]
-        }, b;
+    self:RegisterTypeBuilder("bitmap", function(ws, dom, parentNode, data, depth, parentBounds)
+        return PDUI_Builder:Bitmap(ws, dom, parentNode, data, depth, parentBounds);
     end, false);
-
+    self:RegisterTypeBuilder("bitmap.9", function(ws, dom, parentNode, data, depth, parentBounds)
+        return PDUI_Builder:Bitmap_9(ws, dom, parentNode, data, depth, parentBounds);
+    end, false);
 end
 
 function PDUI:Init()
-    self.modpath = "mods/PDUI/";
     self.workspace = managers.gui_data:create_fullscreen_workspace();
     self:RegisterDefaultBuilders();
+    self.dom = PDUI_DOM.new();
 
     PDUI_Bindings:Init();
-    PDUI_Animations:Init();
 
     if Hooks then
         Hooks:Add("GameSetupUpdate", "OverlordGameSetupUpdate", function(t, dt)
             if Utils:IsInHeist() then
                 PDUI_Bindings:Update(t, dt);
-                PDUI_Animations:Update(t, dt);
             end
         end)
     else
@@ -193,8 +142,8 @@ function PDUI:RemoveUI(name)
     end
     self.loaded[name] = nil;
     self.named[name] = nil;
+    self.dom:RemoveScope(name);
     PDUI_Bindings:UnloadScope(name);
-    PDUI_Animations:RemoveScope(name);
 end
 
 function PDUI:GetElement(scope, name)
@@ -204,11 +153,23 @@ function PDUI:GetElement(scope, name)
     return nil;
 end
 
-function PDUI:LoadUI(scope, filepath)
-    self:LoadSubUI(self.workspace, scope, filepath);
+function PDUI:GetElements(scope, names)
+    local nodeGroup = PDUI_NodeGroup.new();
+    local e;
+    for _,name in pairs(names) do
+        e = self:GetElement(scope, name);
+        if e then
+            nodeGroup:Add(e);
+        end
+    end
+    return nodeGroup;
 end
 
-function PDUI:LoadSubUI(parent, scope, filepath)
+function PDUI:LoadUI(scope, filepath)
+    self:LoadSubUI(nil, scope, filepath);
+end
+
+function PDUI:LoadSubUI(parentNode, scope, filepath)
     if self:UILoaded(scope) then
         self:RemoveUI(scope);
     end
@@ -227,7 +188,7 @@ function PDUI:LoadSubUI(parent, scope, filepath)
     end
     local structure = data['structure'];
     if structure then
-        self:BuildChildren(scope, parent, structure, 1, {0,0,0,0});
+        self:BuildChildren(scope, self.dom, parentNode, structure, 1, {0,0,0,0});
     end
 end
 
@@ -250,16 +211,16 @@ function PDUI:ProcessMetadata(metadata)
     end
 end
 
-function PDUI:BuildChildren(name, parent, data, depth, parentBounds)
+function PDUI:BuildChildren(name, dom, parentNode, data, depth, parentBounds)
     for _,v in pairs(data) do
-        self:BuildElement(name, parent, v, depth + 1, parentBounds);
+        self:BuildElement(name, dom, parentNode, v, depth + 1, parentBounds);
     end
 end
 
-function PDUI:BuildElement(name, parent, data, depth, parentBounds)
+function PDUI:BuildElement(name, dom, parentNode, data, depth, parentBounds)
     local type = data['type'];
     local func = self:GetTypeBuilder(type);
-    local p = parent;
+    local p = parentNode;
     local bounds = parentBounds;
     if func then
         local preD, b = PDUI_Bindings:ResolveInitialBindings(name, data, type);
@@ -274,9 +235,9 @@ function PDUI:BuildElement(name, parent, data, depth, parentBounds)
                 end
             end
         end
-        log(tostring(json.encode(self.variables)))
-        p, bounds = func(self.workspace, parent, d, depth, parentBounds);
-        PDUI_Animations:FindAndStartAnimations(name, p, d);
+        p = func(self.workspace, dom, parentNode, d, depth, parentBounds);
+        p.scope = name;
+        bounds = p.bounds;
         for _,v in pairs(b) do
             v.element = p;
         end
@@ -292,7 +253,7 @@ function PDUI:BuildElement(name, parent, data, depth, parentBounds)
     if self:IsContainer(type) then
         local children = data['children'] or false;
         if children then
-            self:BuildChildren(name, p, children, depth, bounds);
+            self:BuildChildren(name, dom, p, children, depth, bounds);
         end
     end
 end

@@ -13,53 +13,57 @@
 			"silver": [192, 192, 192]
 		},
 		"variables": {
-			"textBounceBounds": [150, 10, 150, 24],
-			"textBounceAnimationSet": [
-				{
-					"type": "marquee-bounce",
-					"speed": 90,
-					"left": 100,
-					"right": 450
-				}
-			]
+			"textBounceBounds": [150, 10, 150, 24]
 		}
 	},
 	"structure": [
 		{
 			"type": "panel",
 			"name": "test11",
-			"bounds": [100, 100, 350, 100],
+			"bounds": [100, 100, 400, 400],
 			"children": [
 				{
-					"type": "bitmap",
-					"bounds": "textBounceBounds",
-					"texture": "guis/textures/pd2/skilltree/selectionframe",
-					"wrap": "wrap",
-					"colour": "silver",
-					"alpha": 70,
-					"animation": "textBounceAnimationSet"
-				},
-				{
-					"type": "rect",
-					"bounds": "textBounceBounds",
-					"colour": "red",
-					"alpha": 10,
-					"animation": "textBounceAnimationSet"
-				},
-				{
-					"type": "label",
-					"text": {
-						"type": "binding",
-						"target": "Overlord:IsPollingEnabledStr()",
-						"interval": 0.2,
-						"prefix": "Overlord polling: "
-					},
-					"font": "medium",
-					"size": 16,
-					"colour": "green",
-					"alpha": 100,
-					"bounds": "textBounceBounds",
-					"animation": "textBounceAnimationSet"
+					"type": "panel",
+					"bounds": [100, 100, "100%", "100%"],
+					"children": [
+						{
+							"type": "panel",
+							"name": "panel2",
+							"bounds": "textBounceBounds",
+							"children": [
+								{
+									"type": "rect",
+									"bounds": [0, 0, "100%", "100%"],
+									"colour": "red",
+									"alpha": 30
+								},
+								{
+									"type": "bitmap.9",
+									"bounds": [0, 0, "100%", "100%"],
+									"region": [0, 0, 64, 64],
+									"insets": [32, 32, 32, 32],
+									"texture": "guis/textures/pd2/skilltree/selectionframe",
+									"colour": "silver",
+									"alpha": 100
+								},
+								{
+									"type": "label",
+									"name": "label1",
+									"text": {
+										"type": "binding",
+										"target": "Overlord:IsPollingEnabledStr()",
+										"interval": 0.2,
+										"prefix": "Overlord polling: "
+									},
+									"font": "medium",
+									"size": 16,
+									"colour": "green",
+									"alpha": 100,
+									"bounds": [8, 4, "100%", "100%"]
+								}
+							]
+						}
+					]
 				},
 				{
 					"type": "label",
@@ -77,9 +81,11 @@
 					"bounds": [10, 30]
 				},
 				{
-					"type": "bitmap",
+					"type": "bitmap.9",
 					"texture": "guis/textures/pd2/skilltree/selectionframe",
 					"wrap": "wrap",
+					"region": [0, 0, 64, 64],
+					"insets": [16, 16, 16, 16],
 					"colour": "silver",
 					"alpha": 70,
 					"blend": "add",

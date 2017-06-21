@@ -1,9 +1,7 @@
 # PDUI
-
 A GUI framework designed to provide a greater degree of ease for creating interfaces within Payday 2
 
 ---
-
 ## Contents
 
 1. [Implemented features](#implemented-features)
@@ -14,7 +12,6 @@ A GUI framework designed to provide a greater degree of ease for creating interf
 4. [How to use](#how-to-use)
     1. [Defining an element in JSON](#defining-an-element-in-json)
     2. [Loading UI files into the workspace](#loading-ui-files-into-the-workspace)
-
 
 ## Implemented features
 - ~~UI created at runtime from JSON file~~

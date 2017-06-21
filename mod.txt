@@ -13,10 +13,6 @@
             "script_path": "lua/pdui_bindings.lua"
         },
         {
-            "global": "PDUI_Animations",
-            "script_path": "lua/pdui_animations.lua"
-        },
-        {
             "global": "PDUI",
             "script_path": "lua/pdui.lua"
         }
