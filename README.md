@@ -14,17 +14,15 @@ A GUI framework designed to provide a greater degree of ease for creating interf
     2. [Loading UI files into the workspace](#loading-ui-files-into-the-workspace)
 
 ## Implemented features
-- ~~UI created at runtime from JSON file~~
-- ~~Element animation support in JSON~~
-    - ~~Label bounce-marquee~~
-    - ~~Custom animations~~
-- ~~Custom elements~~
-- ~~JSON variables~~
-- ~~Hierarchical positioning~~
-- ~~Relative sizes~~
+- UI created at runtime from JSON file
+- Animation support in LUA
+- Custom elements
+- JSON variables
+- Hierarchical positioning
+- Relative sizes
+- Hierarchical invalidation
 
 ### Planned features
-- Hierarchical invalidation
 - Relative Positions
 - UI hooks + Callbacks
 
@@ -43,6 +41,17 @@ A GUI framework designed to provide a greater degree of ease for creating interf
     - template : "Render template"
     - region : [x, y, w, h]
     - animation : Animation object / "Animation variable"
+- Bitmap.9
+    - texture : "texture path"
+    - wrap : "texture wrap"
+    - colour/color : [r, g, b] / "Colour variable"
+    - alpha : 0-100
+    - blend : "Blend mode"
+    - bounds : [x, y, w, h]
+    - template : "Render template"
+    - region : [x, y, w, h]
+    - animation : Animation object / "Animation variable"
+    - insets: [top, bottom, left, right]
 - Rect
     - bounds : [x, y, w, h]
     - colour/color : [r, g, b] / "Colour variable"
