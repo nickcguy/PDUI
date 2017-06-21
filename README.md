@@ -6,7 +6,8 @@ A GUI framework designed to provide a greater degree of ease for creating interf
 
 ## Contents
 
-1. [Planned features](#planned-features)
+1. [Implemented features](#implemented-features)
+    1. [Planned features](#planned-features)
 2. [Supported Elements](#supported-elements-and-their-attributes)
 3. [Metadata system](#metadata-system)
     1. [Sample metadata](#sample-metadata)
@@ -14,17 +15,20 @@ A GUI framework designed to provide a greater degree of ease for creating interf
     1. [Defining an element in JSON](#defining-an-element-in-json)
     2. [Loading UI files into the workspace](#loading-ui-files-into-the-workspace)
 
-## Planned features
+
+## Implemented features
 - ~~UI created at runtime from JSON file~~
 - ~~Element animation support in JSON~~
     - ~~Label bounce-marquee~~
     - ~~Custom animations~~
 - ~~Custom elements~~
 - ~~JSON variables~~
-- ~~Hierarchial positioning~~
-- Hierarchial invalidation
-- Relative Positions
+- ~~Hierarchical positioning~~
 - ~~Relative sizes~~
+
+### Planned features
+- Hierarchical invalidation
+- Relative Positions
 - UI hooks + Callbacks
 
 ## Supported elements, and their attributes
