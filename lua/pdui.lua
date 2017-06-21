@@ -107,6 +107,7 @@ function PDUI:RegisterDefaultBuilders()
         local alpha = data['alpha'] or 100;
         local align = data['halign'] or nil;
         local vert = data['valign'] or nil;
+
         local colour = PDUI:GetColour(data['colour']):with_alpha(alpha / 100);
         return parent:text{
             text = data['text'],
@@ -127,12 +128,12 @@ function PDUI:RegisterDefaultBuilders()
         local b = PDUtils:TransformBounds(data['bounds'], parentBounds);
         local alpha = data['alpha'] or 100;
         local colour = PDUI:GetColour(data['colour']);
-        local texture_rect = data['region   '] or nil;
+        local texture_rect = data['region'] or nil;
         return parent:bitmap{
             texture = data['texture'],
             render_template = data['template'] or nil,
             blend_mode = data['blend'] or nil,
-            wrap_mode = data['wrap_mode'] or nil,
+            wrap_mode = data['wrap'] or nil,
             color = colour,
             layer = depth,
             alpha = alpha / 100,
@@ -203,26 +204,30 @@ function PDUI:GetElement(scope, name)
     return nil;
 end
 
-function PDUI:LoadUI(name, filepath)
-    if self:UILoaded(name) then
-        self:RemoveUI(name);
+function PDUI:LoadUI(scope, filepath)
+    self:LoadSubUI(self.workspace, scope, filepath);
+end
+
+function PDUI:LoadSubUI(parent, scope, filepath)
+    if self:UILoaded(scope) then
+        self:RemoveUI(scope);
     end
     local contents = PDUtils:ReadFile(filepath);
     local data = json.decode(contents);
-    self.loaded[name] = {
-        id = name,
+    self.loaded[scope] = {
+        id = scope,
         filepath = filepath,
         data = data,
         elements = {}
     };
-    self.named[name] = {};
+    self.named[scope] = {};
     local meta = data['meta'];
     if meta then
         self:ProcessMetadata(meta);
     end
     local structure = data['structure'];
     if structure then
-        self:BuildChildren(name, self.workspace, structure, 1, {0,0,0,0});
+        self:BuildChildren(scope, parent, structure, 1, {0,0,0,0});
     end
 end
 
