@@ -28,11 +28,11 @@ A GUI framework designed to provide a greater degree of ease for creating interf
 - UI hooks + Callbacks
 
 ## Supported elements, and their attributes
-- ~~Panel~~
+- Panel
     - bounds : [x, y, w, h]
     - children : []
     - animation : Animation object / "Animation variable"
-- ~~Bitmap~~
+- Bitmap
     - texture : "texture path"
     - wrap : "texture wrap"
     - colour/color : [r, g, b] / "Colour variable"
@@ -42,12 +42,12 @@ A GUI framework designed to provide a greater degree of ease for creating interf
     - template : "Render template"
     - region : [x, y, w, h]
     - animation : Animation object / "Animation variable"
-- ~~Rect~~
+- Rect
     - bounds : [x, y, w, h]
     - colour/color : [r, g, b] / "Colour variable"
     - alpha : 0-100
     - animation : Animation object / "Animation variable"
-- ~~Text~~
+- Text
     - bounds : [x, y, w, h]
     - font : "Font path" / "Font variable"
     - size : "Font size"
